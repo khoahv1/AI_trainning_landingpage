@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI VIBE 2026 | Viettel Networks</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web/src/regular/style.css">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web/src/fill/style.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        vt: {
+                            red: '#EE0033',
+                            dark: '#1A1F3A',
+                            light: '#F8F9FB',
+                            gray: '#64748B',
+                            text: '#0F172A'
+                        },
+                        ai: {
+                            cyan: '#00D4FF',
+                            purple: '#7C3AED'
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['"Be Vietnam Pro"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(0, 212, 255, 0.5)',
+                        'glow-red': '0 4px 20px rgba(238, 0, 51, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; color: #0F172A; background-color: #FFFFFF; }
+        h1, h2, h3, h4, h5, h6, .font-heading { font-family: '"Be Vietnam Pro"', sans-serif; }
+        
+        .text-gradient-ai {
+            background: linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .bg-gradient-ai {
+            background: linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%);
+        }
+
+        .hero-bg {
+            background-color: #1A1F3A;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .tab-content.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .btn-hover-effect { transition: all 0.3s ease; }
+        .btn-hover-effect:hover { transform: scale(1.02); box-shadow: 0 4px 20px rgba(238, 0, 51, 0.4); }
+        .btn-hover-effect:active { transform: scale(0.98); }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+
+    <!-- Chosen Palette: Viettel Corporate & AI Accent (VT-Red #EE0033, VT-Dark #1A1F3A, Cyan #00D4FF, Purple #7C3AED) -->
+    <!-- Application Structure Plan: The SPA is structured to build a persuasive narrative for internal VTNet employees. It starts with a high-impact Hero section combining branding and the core value proposition. A 'Problem/Context' section follows, using a dynamic bar chart to visually prove the time-saving benefits of AI. The 'Curriculum' uses an interactive tabbed timeline to condense information. 'Outcomes' and 'Stats' reinforce value and social proof. Finally, a clear 'Registration' section with a countdown timer drives FOMO and action. A sticky bottom CTA ensures the primary action is always accessible. -->
+    <!-- Visualization & Content Choices: 1. Time Comparison -> Goal: Persuade -> Viz: Bar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Quantifies the "3-5 hours vs 30 mins" claim instantly. 2. Curriculum -> Goal: Organize -> Viz: Interactive Tabbed List -> Interaction: Click tabs to swap content -> Justification: Prevents text overload, keeps users engaged. 3. Stats -> Goal: Inform/Social Proof -> Viz: Animated Counters -> Interaction: Scroll-triggered counting -> Justification: Dynamic presentation of success metrics. NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-vt-dark/95 backdrop-blur-md border-b border-white/10" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-heading font-bold text-vt-red text-xl">V</div>
+                    <span class="font-heading font-bold text-xl text-white tracking-wide">Viettel Networks</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#context" class="text-gray-300 hover:text-white transition-colors font-medium">Mục tiêu</a>
+                    <a href="#curriculum" class="text-gray-300 hover:text-white transition-colors font-medium">Lộ trình</a>
+                    <a href="#outcomes" class="text-gray-300 hover:text-white transition-colors font-medium">Quyền lợi</a>
+                </div>
+                <div>
+                    <a href="#register" class="bg-vt-red text-white px-6 py-2.5 rounded-full font-semibold btn-hover-effect inline-block">Đăng ký ngay</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-bg min-h-screen flex items-center pt-20 relative overflow-hidden">
+        <div class="absolute top-1/4 left-10 w-64 h-64 bg-ai-cyan rounded-full mix-blend-multiply filter blur-[128px] opacity-20"></div>
+        <div class="absolute bottom-1/4 right-10 w-64 h-64 bg-ai-purple rounded-full mix-blend-multiply filter blur-[128px] opacity-20"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-6 backdrop-blur-sm">
+                        <i class="ph-fill ph-sparkle text-ai-cyan"></i>
+                        <span class="text-white text-sm font-medium tracking-wide">Chương trình đào tạo nội bộ 2026</span>
+                    </div>
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-[1.1] mb-6">
+                        AI VIBE 2026:<br/>
+                        <span class="text-gradient-ai">Từ ý tưởng đến Slide đỉnh cao</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed" id="typewriter-text">
+                        Bạn không cần biết code. Bạn chỉ cần biết mình muốn gì — AI sẽ làm phần còn lại. Thiết kế Landing Page chuyên nghiệp và Slide chuẩn brand trong chớp mắt.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
+                        <a href="#register" class="bg-vt-red text-white px-8 py-4 rounded-full font-bold text-lg btn-hover-effect text-center shadow-glow-red">
+                            Tham gia ngay
+                        </a>
+                        <a href="#context" class="px-8 py-4 rounded-full font-bold text-lg text-white border border-white/30 hover:bg-white/10 transition-colors text-center">
+                            Tìm hiểu thêm
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-white/10">
+                        <div class="flex flex-col items-center lg:items-start">
+                            <i class="ph ph-lightning text-3xl text-ai-cyan mb-2"></i>
+                            <span class="text-2xl font-bold text-white font-heading">5 Giờ</span>
+                            <span class="text-sm text-gray-400">Học nhanh - làm thật</span>
+                        </div>
+                        <div class="flex flex-col items-center lg:items-start">
+                            <i class="ph ph-palette text-3xl text-ai-purple mb-2"></i>
+                            <span class="text-2xl font-bold text-white font-heading">2 Sản phẩm</span>
+                            <span class="text-sm text-gray-400">Slide & Landing Page</span>
+                        </div>
+                        <div class="flex flex-col items-center lg:items-start">
+                            <i class="ph ph-medal text-3xl text-vt-red mb-2"></i>
+                            <span class="text-2xl font-bold text-white font-heading">Chứng nhận</span>
+                            <span class="text-sm text-gray-400">Đáp ứng KNL kỹ năng AI</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden lg:flex justify-center items-center">
+                    <div class="relative w-full max-w-md aspect-square rounded-full border border-white/10 flex items-center justify-center animate-[spin_60s_linear_infinite]">
+                        <div class="absolute w-3/4 h-3/4 rounded-full border border-dashed border-ai-cyan/30 animate-[spin_40s_reverse_linear_infinite]"></div>
+                        <div class="absolute w-1/2 h-1/2 rounded-full bg-gradient-ai opacity-20 blur-2xl"></div>
+                        <i class="ph-fill ph-robot text-9xl text-white relative z-10 animate-[bounce_4s_ease-in-out_infinite]"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="context" class="py-24 bg-vt-light reveal">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-heading font-bold text-vt-dark mb-6">Tại sao bạn cần khóa học này?</h2>
+                <p class="text-lg text-vt-gray max-w-3xl mx-auto">Trong kỷ nguyên AI, một CBCNV giỏi không còn là người làm slide đẹp nhất, mà là người biết khiến AI làm slide đẹp nhất cho mình.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-start opacity-70">
+                        <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="ph ph-hourglass-high text-2xl text-gray-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-vt-dark mb-2">Cách làm truyền thống</h3>
+                            <p class="text-vt-gray">Mất từ 3 đến 5 tiếng đồng hồ chật vật tìm kiếm icon, căn chỉnh bố cục, phối màu cho một báo cáo hay tờ trình.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-ai-cyan/30 flex gap-4 items-start relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-2 h-full bg-gradient-ai"></div>
+                        <div class="w-12 h-12 bg-ai-cyan/10 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="ph-fill ph-magic-wand text-2xl text-ai-purple"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-vt-dark mb-2">Giải pháp AI VIBE</h3>
+                            <p class="text-vt-gray">Chỉ mất <strong>30 phút</strong> để tạo ra bộ slide chuẩn nhận diện thương hiệu Viettel Networks bằng các công cụ AI tạo sinh.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                    <h3 class="text-center font-heading font-bold text-lg mb-6 text-vt-dark">Thời gian hoàn thiện 1 bộ Slide (Phút)</h3>
+                    <div class="chart-container">
+                        <canvas id="timeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="curriculum" class="py-24 bg-vt-dark text-white reveal relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#FFFFFF 1px, transparent 1px); background-size: 30px 30px;"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-ai-cyan font-bold tracking-wider uppercase text-sm mb-2 block">Chương trình học</span>
+                <h2 class="text-4xl md:text-5xl font-heading font-bold mb-6">Lộ trình 5 giờ <span class="text-vt-red">"Rực cháy"</span></h2>
+                <p class="text-gray-300 max-w-2xl mx-auto">Nội dung thực chiến, tập trung vào kỹ năng ứng dụng ngay vào công việc hàng ngày tại VTNet.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white/5 rounded-3xl border border-white/10 p-4 md:p-8">
+                <div class="lg:col-span-5 flex flex-col gap-2">
+                    <button class="step-btn active text-left p-4 rounded-xl transition-all duration-300 border border-transparent hover:bg-white/10 data-[active=true]:bg-white/10 data-[active=true]:border-ai-cyan/50" data-target="step1">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-bold font-heading text-ai-cyan step-number">01</div>
+                            <h3 class="font-bold text-lg">Mindset "Vibe Coding"</h3>
+                        </div>
+                    </button>
+                    <button class="step-btn text-left p-4 rounded-xl transition-all duration-300 border border-transparent hover:bg-white/10 data-[active=true]:bg-white/10 data-[active=true]:border-ai-cyan/50" data-target="step2">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-bold font-heading text-gray-400 step-number">02</div>
+                            <h3 class="font-bold text-lg">Thiết kế Slide bằng AI</h3>
+                        </div>
+                    </button>
+                    <button class="step-btn text-left p-4 rounded-xl transition-all duration-300 border border-transparent hover:bg-white/10 data-[active=true]:bg-white/10 data-[active=true]:border-ai-cyan/50" data-target="step3">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-bold font-heading text-gray-400 step-number">03</div>
+                            <h3 class="font-bold text-lg">Đóng gói quy trình (Skill)</h3>
+                        </div>
+                    </button>
+                    <button class="step-btn text-left p-4 rounded-xl transition-all duration-300 border border-transparent hover:bg-white/10 data-[active=true]:bg-white/10 data-[active=true]:border-ai-cyan/50" data-target="step4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-bold font-heading text-gray-400 step-number">04</div>
+                            <h3 class="font-bold text-lg">Tự tay làm Landing Page</h3>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="lg:col-span-7 bg-[#0F1426] rounded-2xl p-6 md:p-10 border border-white/5 relative min-h-[300px] flex items-center">
+                    <div id="step1" class="tab-content active w-full">
+                        <i class="ph-fill ph-brain text-5xl text-ai-cyan mb-6"></i>
+                        <h3 class="text-2xl font-bold font-heading mb-4 text-white">Mindset "Vibe Coding" & Prompt Engineering</h3>
+                        <p class="text-gray-300 leading-relaxed mb-4">Thay đổi tư duy làm việc: Bạn là người đưa ra định hướng, AI là người thực thi. Học cách xây dựng câu lệnh (Prompt) chuẩn xác để AI hiểu rõ bối cảnh nghiệp vụ VTNet.</p>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-vt-red"></i> Cấu trúc Prompt đa tầng</li>
+                            <li class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-vt-red"></i> Khắc phục lỗi AI "ảo giác"</li>
+                        </ul>
+                    </div>
+                    <div id="step2" class="tab-content w-full">
+                        <i class="ph-fill ph-presentation-chart text-5xl text-ai-purple mb-6"></i>
+                        <h3 class="text-2xl font-bold font-heading mb-4 text-white">Thiết kế Slide bằng Claude, Gemini, Canva</h3>
+                        <p class="text-gray-300 leading-relaxed mb-4">Thực hành tạo outline báo cáo, tờ trình siêu tốc. Biến text khô khan thành các biểu đồ, Infographic bằng AI và hoàn thiện trên Canva theo chuẩn Brand Guidelines.</p>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-vt-red"></i> Claude 3.5 & Gemini Advanced</li>
+                            <li class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-vt-red"></i> Canva Bulk Create & Magic Design</li>
+                        </ul>
+                    </div>
+                    <div id="step3" class="tab-content w-full">
+                        <i class="ph-fill ph-package text-5xl text-ai-cyan mb-6"></i>
+                        <h3 class="text-2xl font-bold font-heading mb-4 text-white">Đóng gói quy trình (Skill of Claude)</h3>
+                        <p class="text-gray-300 leading-relaxed mb-4">Không chỉ tạo ra một file, bạn sẽ học cách dạy lại AI quy trình làm việc của mình, tạo thành một "Skill" để tái sử dụng và chia sẻ cho đồng nghiệp trong ban/phòng.</p>
+                    </div>
+                    <div id="step4" class="tab-content w-full">
+                        <i class="ph-fill ph-browser text-5xl text-ai-purple mb-6"></i>
+                        <h3 class="text-2xl font-bold font-heading mb-4 text-white">Tự tay làm Landing Page (Không cần code)</h3>
+                        <p class="text-gray-300 leading-relaxed mb-4">Sử dụng AI tạo ra mã HTML/CSS/JS cho một trang web (như trang bạn đang xem) để làm CV cá nhân, trang giới thiệu dự án hoặc báo cáo tương tác.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="outcomes" class="py-24 bg-white reveal">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-heading font-bold text-vt-dark mb-6">Bạn sẽ mang gì về?</h2>
+                <p class="text-lg text-vt-gray max-w-2xl mx-auto">Kết quả thực tế ngay sau 5 giờ học, đáp ứng trực tiếp tiêu chí đánh giá KNL.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="group p-8 rounded-2xl bg-vt-light border border-gray-200 hover:shadow-glow hover:-translate-y-2 transition-all duration-300 text-center relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-vt-red transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    <div class="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mx-auto mb-6 text-vt-red text-3xl">
+                        <i class="ph-fill ph-file-slides"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-vt-dark mb-4">01 Bộ Slide Chuẩn Brand</h3>
+                    <p class="text-vt-gray leading-relaxed">Áp dụng trực tiếp vào công việc hiện tại. Điểm thực hành tối đa 8/10.</p>
+                </div>
+
+                <div class="group p-8 rounded-2xl bg-vt-light border border-gray-200 hover:shadow-glow hover:-translate-y-2 transition-all duration-300 text-center relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-ai-cyan transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    <div class="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mx-auto mb-6 text-ai-cyan text-3xl">
+                        <i class="ph-fill ph-layout"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-vt-dark mb-4">01 Landing Page Thực Thụ</h3>
+                    <p class="text-vt-gray leading-relaxed">File HTML chạy được ngay trên trình duyệt. Điểm bonus tối đa 2/10.</p>
+                </div>
+
+                <div class="group p-8 rounded-2xl bg-vt-light border border-gray-200 hover:shadow-glow hover:-translate-y-2 transition-all duration-300 text-center relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-ai-purple transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    <div class="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mx-auto mb-6 text-ai-purple text-3xl">
+                        <i class="ph-fill ph-gift"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-vt-dark mb-4">Bộ Prompt Độc Quyền</h3>
+                    <p class="text-vt-gray leading-relaxed">Template Prompt xây dựng riêng cho các nghiệp vụ đặc thù tại VTNet.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="stats" class="py-20 bg-vt-red relative overflow-hidden reveal">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#EE0033] to-[#990022]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 divide-y md:divide-y-0 md:divide-x divide-white/20 text-center">
+                <div class="p-4">
+                    <div class="text-5xl font-heading font-bold text-white mb-2"><span class="counter" data-target="100">0</span>%</div>
+                    <div class="text-white/80 font-medium">Học viên có sản phẩm</div>
+                </div>
+                <div class="p-4">
+                    <div class="text-5xl font-heading font-bold text-white mb-2"><span class="counter" data-target="1000">0</span>+</div>
+                    <div class="text-white/80 font-medium">CBCNV đã tiếp cận</div>
+                </div>
+                <div class="p-4">
+                    <div class="text-5xl font-heading font-bold text-white mb-2"><span class="counter" data-target="7">0</span>/10</div>
+                    <div class="text-white/80 font-medium">Điểm trung bình đạt KNL</div>
+                </div>
+                <div class="p-4">
+                    <div class="text-5xl font-heading font-bold text-white mb-2"><span class="counter" data-target="5">0</span>h</div>
+                    <div class="text-white/80 font-medium">Thời lượng thực chiến</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="register" class="py-24 bg-vt-light reveal">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-12 text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-ai"></div>
+                
+                <h2 class="text-4xl font-heading font-bold text-vt-dark mb-4">Sẵn sàng làm chủ AI?</h2>
+                <p class="text-vt-gray mb-8">Nâng cấp hiệu suất công việc của bạn ngay hôm nay. Lớp học dự kiến diễn ra vào Thứ Sáu, 08/05/2026.</p>
+
+                <div class="inline-block bg-vt-red/10 border border-vt-red/20 rounded-xl px-6 py-4 mb-10">
+                    <div class="text-sm font-bold text-vt-red mb-2 uppercase tracking-wide">⏰ Hạn cuối đăng ký</div>
+                    <div class="flex gap-4 justify-center" id="countdown">
+                        <div class="flex flex-col"><span class="text-3xl font-bold font-heading text-vt-dark" id="days">00</span><span class="text-xs text-vt-gray">Ngày</span></div><span class="text-2xl font-bold text-vt-dark">:</span>
+                        <div class="flex flex-col"><span class="text-3xl font-bold font-heading text-vt-dark" id="hours">00</span><span class="text-xs text-vt-gray">Giờ</span></div><span class="text-2xl font-bold text-vt-dark">:</span>
+                        <div class="flex flex-col"><span class="text-3xl font-bold font-heading text-vt-dark" id="mins">00</span><span class="text-xs text-vt-gray">Phút</span></div><span class="text-2xl font-bold text-vt-dark">:</span>
+                        <div class="flex flex-col"><span class="text-3xl font-bold font-heading text-vt-red" id="secs">00</span><span class="text-xs text-vt-gray">Giây</span></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 text-left">
+                    <div class="flex flex-col items-center text-center p-4">
+                        <div class="w-10 h-10 rounded-full bg-vt-dark text-white flex items-center justify-center font-bold mb-4">1</div>
+                        <h4 class="font-bold text-vt-dark mb-2">Điền Form khảo sát</h4>
+                        <p class="text-sm text-vt-gray">Đánh giá kỹ năng hiện tại.</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-4">
+                        <div class="w-10 h-10 rounded-full bg-vt-dark text-white flex items-center justify-center font-bold mb-4">2</div>
+                        <h4 class="font-bold text-vt-dark mb-2">Nhận Email</h4>
+                        <p class="text-sm text-vt-gray">Xác nhận lịch học và tài liệu.</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-4">
+                        <div class="w-10 h-10 rounded-full bg-vt-dark text-white flex items-center justify-center font-bold mb-4">3</div>
+                        <h4 class="font-bold text-vt-dark mb-2">Tham gia lớp</h4>
+                        <p class="text-sm text-vt-gray">Mang theo Laptop VTNet.</p>
+                    </div>
+                </div>
+
+                <a href="#" class="inline-block bg-vt-red text-white px-10 py-5 rounded-full font-bold text-xl btn-hover-effect shadow-glow-red w-full md:w-auto">
+                    Điền Form Khảo Sát Đăng Ký
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#0A0A0A] text-white py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <div class="flex justify-center md:justify-start items-center gap-3 mb-2">
+                    <div class="w-8 h-8 bg-white rounded flex items-center justify-center font-heading font-bold text-vt-red text-lg">V</div>
+                    <span class="font-heading font-bold text-lg tracking-wide">Viettel Networks</span>
+                </div>
+                <p class="text-gray-500 text-sm">Tổng Công ty Mạng lưới — Viettel Group</p>
+            </div>
+            <div class="text-gray-500 text-sm">
+                &copy; 2026 Viettel Networks — All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <div id="sticky-cta" class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] transform translate-y-full transition-transform duration-300 z-40 flex justify-center items-center gap-6">
+        <div class="hidden md:block font-medium text-vt-dark">
+            ⏰ Chỉ còn <span id="sticky-days" class="font-bold text-vt-red"></span> ngày để đăng ký.
+        </div>
+        <a href="#register" class="bg-vt-red text-white px-8 py-3 rounded-full font-bold shadow-md hover:bg-red-700 transition-colors">
+            Đăng ký ngay
+        </a>
+    </div>
+
+    <script>
+        // Data Configuration
+        const chartData = {
+            labels: ['Làm thủ công', 'Với AI VIBE'],
+            datasets: [{
+                label: 'Thời gian (Phút)',
+                data: [300, 30],
+                backgroundColor: [
+                    '#64748B', 
+                    '#EE0033' 
+                ],
+                borderRadius: 8,
+                barPercentage: 0.6
+            }]
+        };
+
+        // Initialize Application Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            initChart();
+            initTabs();
+            initCountdown();
+            initScrollReveal();
+            initStickyCTA();
+            initCounters();
+        });
+
+        function initChart() {
+            const ctx = document.getElementById('timeChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return context.parsed.y + ' Phút'; }
+                            },
+                            backgroundColor: '#1A1F3A',
+                            titleFont: { family: 'Inter', size: 14 },
+                            bodyFont: { family: 'Inter', size: 14, weight: 'bold' },
+                            padding: 12,
+                            cornerRadius: 8
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            grid: { color: '#F1F5F9' },
+                            border: { display: false },
+                            ticks: { font: { family: 'Inter' } }
+                        },
+                        x: { 
+                            grid: { display: false },
+                            border: { display: false },
+                            ticks: { font: { family: 'Inter', weight: '600' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initTabs() {
+            const buttons = document.querySelectorAll('.step-btn');
+            const contents = document.querySelectorAll('.tab-content');
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Reset
+                    buttons.forEach(b => {
+                        b.setAttribute('data-active', 'false');
+                        b.querySelector('.step-number').classList.replace('text-ai-cyan', 'text-gray-400');
+                    });
+                    contents.forEach(c => c.classList.remove('active'));
+
+                    // Activate
+                    btn.setAttribute('data-active', 'true');
+                    btn.querySelector('.step-number').classList.replace('text-gray-400', 'text-ai-cyan');
+                    const targetId = btn.getAttribute('data-target');
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+            // Initial state
+            buttons[0].setAttribute('data-active', 'true');
+        }
+
+        function initCountdown() {
+            const countDownDate = new Date("May 10, 2026 23:59:59").getTime();
+
+            const updateTimer = () => {
+                const now = new Date().getTime();
+                const distance = countDownDate - now;
+
+                if (distance < 0) {
+                    document.getElementById("countdown").innerHTML = "<span class='text-vt-red font-bold'>Đã hết hạn đăng ký</span>";
+                    document.getElementById("sticky-days").innerText = "0";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("days").innerText = days.toString().padStart(2, '0');
+                document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+                document.getElementById("mins").innerText = minutes.toString().padStart(2, '0');
+                document.getElementById("secs").innerText = seconds.toString().padStart(2, '0');
+                
+                const stickyDays = document.getElementById("sticky-days");
+                if(stickyDays) stickyDays.innerText = days;
+            };
+
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            const revealOnScroll = () => {
+                const windowHeight = window.innerHeight;
+                const elementVisible = 100;
+                
+                reveals.forEach(reveal => {
+                    const elementTop = reveal.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveal.classList.add('active');
+                    }
+                });
+            };
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll(); // Trigger on load
+        }
+
+        function initStickyCTA() {
+            const stickyCta = document.getElementById('sticky-cta');
+            const heroHeight = document.querySelector('header').offsetHeight;
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > heroHeight) {
+                    stickyCta.classList.remove('translate-y-full');
+                } else {
+                    stickyCta.classList.add('translate-y-full');
+                }
+            });
+        }
+
+        function initCounters() {
+            const counters = document.querySelectorAll('.counter');
+            let hasCounted = false;
+
+            const startCounting = () => {
+                counters.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    const duration = 2000; // ms
+                    const increment = target / (duration / 16); // 60fps
+                    let current = 0;
+
+                    const updateCounter = () => {
+                        current += increment;
+                        if (current < target) {
+                            counter.innerText = Math.ceil(current);
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCounter();
+                });
+                hasCounted = true;
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                if(entries[0].isIntersecting && !hasCounted) {
+                    startCounting();
+                }
+            }, { threshold: 0.5 });
+
+            const statsSection = document.getElementById('stats');
+            if(statsSection) observer.observe(statsSection);
+        }
+    </script>
+</body>
+</html>
